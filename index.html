@@ -386,8 +386,11 @@ const resumeData = {
   yearsExperience: "7+",
   summary: "Self-motivated software developer with 7+ years building mobile applications across Android and cross-platform stacks — from custom Compose UI and MVVM architecture to React Native features shipped at scale. Focused on smooth user experience, clean architecture, and shipping reliably through staged rollouts and A/B tests.",
   contact: {
-    email: "couragepaul.cp@gmail.com",
-    linkedin: "https://www.linkedin.com/in/courage-e-668814165",     // <-- paste your full LinkedIn URL here
+    // Email is base64-encoded so it doesn't sit as plain, scrapable text
+    // in the page source. To change it: emailEncoded = btoa("new@email.com")
+    // (run that in any browser console to get the encoded value).
+    emailEncoded: "Y291cmFnZXBhdWwuY3BAZ21haWwuY29t",
+    linkedin: "https://www.linkedin.com/in/courage-e-668814165", 
     github: "https://github.com/couragepaul"
   },
 
@@ -508,7 +511,7 @@ function render(){
 
   // cta
   const cta = document.getElementById('hero-cta');
-  cta.appendChild(el('a','btn primary', `Email me →`)).setAttribute('href', `mailto:${d.contact.email}`);
+  cta.appendChild(el('a','btn primary', `Email me →`)).setAttribute('href', `mailto:${getEmail()}`);
   if(d.contact.linkedin && d.contact.linkedin !== '#'){
     cta.appendChild(el('a','btn ghost', `LinkedIn ↗`)).setAttribute('href', d.contact.linkedin);
   }
@@ -577,11 +580,19 @@ function render(){
   });
 
   // footer
+  const emailAddr = getEmail();
   document.getElementById('footer-links').innerHTML = `
-    <a href="mailto:${d.contact.email}">${d.contact.email}</a>
+    <a href="mailto:${emailAddr}">${emailAddr}</a>
     ${d.contact.linkedin && d.contact.linkedin !== '#' ? `<a href="${d.contact.linkedin}" target="_blank" rel="noopener">LinkedIn</a>` : ''}
     ${d.contact.github ? `<a href="${d.contact.github}" target="_blank" rel="noopener">GitHub</a>` : ''}
   `;
+}
+
+function getEmail(){
+  // Decoded in the browser at render time rather than stored as plain
+  // text, so simple scrapers that scan static HTML/JS source don't
+  // pick it up directly.
+  return atob(resumeData.contact.emailEncoded);
 }
 
 function nameSplit(name){
