@@ -384,13 +384,17 @@ const resumeData = {
   title: "Software Developer",
   location: "Toronto, ON",
   yearsExperience: "7+",
+  // Path to your resume PDF, relative to this HTML file. Add the PDF to
+  // your repo (same folder as index.html) using this exact filename, or
+  // change this value to match whatever you name it.
+  resumeFile: "resume.pdf",
   summary: "Self-motivated software developer with 7+ years building mobile applications across Android and cross-platform stacks — from custom Compose UI and MVVM architecture to React Native features shipped at scale. Focused on smooth user experience, clean architecture, and shipping reliably through staged rollouts and A/B tests.",
   contact: {
     // Email is base64-encoded so it doesn't sit as plain, scrapable text
     // in the page source. To change it: emailEncoded = btoa("new@email.com")
     // (run that in any browser console to get the encoded value).
     emailEncoded: "Y291cmFnZXBhdWwuY3BAZ21haWwuY29t",
-    linkedin: "https://www.linkedin.com/in/courage-e-668814165", 
+    linkedin: "#",     // <-- paste your full LinkedIn URL here
     github: "https://github.com/couragepaul"
   },
 
@@ -512,6 +516,12 @@ function render(){
   // cta
   const cta = document.getElementById('hero-cta');
   cta.appendChild(el('a','btn primary', `Email me →`)).setAttribute('href', `mailto:${getEmail()}`);
+  if(d.resumeFile){
+    const r = el('a','btn ghost', `Download resume ⭳`);
+    r.setAttribute('href', d.resumeFile);
+    r.setAttribute('download','');
+    cta.appendChild(r);
+  }
   if(d.contact.linkedin && d.contact.linkedin !== '#'){
     cta.appendChild(el('a','btn ghost', `LinkedIn ↗`)).setAttribute('href', d.contact.linkedin);
   }
